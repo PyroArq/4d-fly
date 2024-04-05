@@ -1,20 +1,19 @@
-
-#define MOD_NAME "4D SmoothFly"
-#define MOD_VER "2.7"
-
 #include <4dm.h>
 #include "4DKeyBinds.h"
 using namespace fdm;
+
+// Initialize the DLLMain
+initDLL
 
 bool fly = false;
 
 // movement rewrite
 double epsilon = 0.0001;
-void(__thiscall* Player_updatePos)(Player* self, World* world, double dt);
-void Player_updatePos_H(Player* self, World* world, double dt) {
+$hook(void, Player, updatePos, World* world, double dt) {
+//void Player_updatePos_H(Player* self, World* world, double dt) {
 	
 	if (!fly)
-		return Player_updatePos(self, world, dt);
+		return original(self, world, dt);
 	
 	// if we are suspiciously slightly below a full block, move us up on it a tad
 	if ( floor(self->pos.y + epsilon) > floor(self->pos.y - epsilon) )
@@ -68,32 +67,20 @@ void Player_updatePos_H(Player* self, World* world, double dt) {
 	self->crouching = false;
 	self->keepOnEdge = false;
 	
-	return Player_updatePos(self, world, dt);
+	return original(self, world, dt);
 }
 
 void toggleFly(){
 	
 	fly = !fly;
 	
-	if (fly)
-		Player_updatePos_H(&StateGame::instanceObj->player,&*StateGame::instanceObj->world,0);
+	// if (fly)
+	// 	Player_updatePos_H(&StateGame::instanceObj->player,&*StateGame::instanceObj->world,0);
 	
 	printf("fly: %s\n", fly ? "on" : "off");
 }
 
 
-DWORD WINAPI Main_Thread(void* hModule) {
-	
+$exec {
 	KeyBinds::addBind( "Toggle Flight", glfw::Keys::F, KeyBindsScope::PLAYER, [](GLFWwindow* window, int action, int mods){ if (action == GLFW_PRESS) toggleFly(); });
-	
-	Hook( FUNC_PLAYER_UPDATEPOS, Player_updatePos_H, &Player_updatePos );
-	
-	EnableHook();
-	return true;
-}
-
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD _reason, LPVOID lpReserved) {
-	if (_reason == DLL_PROCESS_ATTACH)
-		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Main_Thread, hModule, 0, NULL);
-	return true;
 }

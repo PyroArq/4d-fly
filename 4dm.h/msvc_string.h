@@ -170,3 +170,9 @@ std::istream& operator>>( std::istream& is, msvc_string& str ){
 	str = capture;
 	return is;
 }
+
+template<> struct std::hash<msvc_string> {
+    auto operator()(msvc_string const& s) const noexcept {
+        return std::hash<std::string>{}(s);
+    }
+};

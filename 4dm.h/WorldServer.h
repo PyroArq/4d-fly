@@ -21,7 +21,7 @@ namespace fdm
 			uuid id; // 0x8
 			uint32_t handle; // 0x18
 			PAD(0x4);
-			std::string displayName; // 0x20
+			msvc_string displayName; // 0x20
 			Status status;
 			PAD(0x8);
 			Connection::OutMessage skinMessage; // 0x48

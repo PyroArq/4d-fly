@@ -23,7 +23,7 @@ namespace fdm
 		inline static MeshRenderer* cubeTriangleRenderer = reinterpret_cast<MeshRenderer*>((base + 0x278908));
 		inline static MeshBuilder* cubeWireframeMesh = reinterpret_cast<MeshBuilder*>((base + 0x278A10));
 		inline static MeshRenderer* cubeWireframeRenderer = reinterpret_cast<MeshRenderer*>((base + 0x278998));
-		inline static glm::vec3** line = reinterpret_cast<glm::vec3**>((base + 0x278440));
+		inline static glm::vec3* line = reinterpret_cast<glm::vec3*>((base + 0x278440));
 		inline static MeshBuilder* lineMesh = reinterpret_cast<MeshBuilder*>((base + 0x278928));
 		inline static MeshRenderer* lineRenderer = reinterpret_cast<MeshRenderer*>((base + 0x2789B8));
 		inline static FontRenderer* fr = reinterpret_cast<FontRenderer*>((base + 0x278AA0));
@@ -37,11 +37,11 @@ namespace fdm
 
 		inline static void renderHand(const glm::mat4& mat) 
 		{
-			return reinterpret_cast<void (__fastcall*)(const glm::mat4& mat)>(FUNC_COMPASSRENDERER_RENDERHAND)(mat);
+			return reinterpret_cast<void (__fastcall*)(const glm::mat4& mat)>(getFuncAddr((int)Func::CompassRenderer::renderHand))(mat);
 		}
 		inline static void renderItemDrop(const m4::Mat5& mat, const glm::vec4& lightDir) 
 		{
-			return reinterpret_cast<void (__fastcall*)(const m4::Mat5& mat, const glm::vec4& lightDir)>(FUNC_COMPASSRENDERER_RENDERITEMDROP)(mat, lightDir);
+			return reinterpret_cast<void (__fastcall*)(const m4::Mat5& mat, const glm::vec4& lightDir)>(getFuncAddr((int)Func::CompassRenderer::renderItemDrop))(mat, lightDir);
 		}
 	};
 }

@@ -25,9 +25,10 @@ DWORD WINAPI Main_Thread(void* hModule) {
 
 
 ##############################*/
+#pragma once
 
 // this is the name of the console mod's dll
-#define CONSOLE_MOD_DLL "4D Console.dll"
+#define CONSOLE_MOD_ID "redjard.console"
 
 // These are the events you can subscribe to with registerConsoleCallback()
 enum class ConsoleEvent {init,info};
@@ -64,35 +65,19 @@ inline bool registerConsoleKeyinfo( ConsoleKeyinfos keyinfo_vec ) {
 	keyinfos[i] = {NULL};
 	
 	
-	HMODULE dll;
-	FARPROC functPointer;
-	
-	if (NULL==( dll = GetModuleHandleA(CONSOLE_MOD_DLL) ))
+	if (!fdm::isModLoaded(CONSOLE_MOD_ID));
 		return false;
 	
-	if (NULL==( functPointer = GetProcAddress(dll,"registerKeyinfo") ))
-		return false;
-	
-	auto registerConsoleCallback = reinterpret_cast< bool (__stdcall*)( wrapper_console_keyinfos ) >(functPointer);
-	
-	return registerConsoleCallback(keyinfos);
+	return reinterpret_cast< bool (__stdcall*)( wrapper_console_keyinfos ) >(GetProcAddress(fdm::getModHandle(CONSOLE_MOD_ID),"registerKeyinfo"))(keyinfos);
 }
 
 typedef void (*consoleCallbackFunct)();
 inline bool registerConsoleCallback( consoleCallbackFunct callback, ConsoleEvent event ) {
 	
-	HMODULE dll;
-	FARPROC functPointer;
-	
-	if (NULL==( dll = GetModuleHandleA(CONSOLE_MOD_DLL) ))
+	if (!fdm::isModLoaded(CONSOLE_MOD_ID));
 		return false;
 	
-	if (NULL==( functPointer = GetProcAddress(dll,"registerCallback") ))
-		return false;
-	
-	auto registerConsoleCallback = reinterpret_cast< bool (__stdcall*)( consoleCallbackFunct callback, ConsoleEvent event ) >(functPointer);
-	
-	return registerConsoleCallback(callback,event);
+	return reinterpret_cast< bool (__stdcall*)( consoleCallbackFunct, ConsoleEvent ) >(GetProcAddress(fdm::getModHandle(CONSOLE_MOD_ID),"registerCallback"))(callback,event);
 }
 
 }

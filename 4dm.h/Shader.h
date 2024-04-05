@@ -9,19 +9,13 @@ namespace fdm
 	public:
 		enum shaderType
 		{
-			VERTEX_SHADER = 0x8B31,
-			GEOMETRY_SHADER = 0x8DD9,
-			FRAGMENT_SHADER = 0x8B30
+			VERTEX_SHADER = GL_VERTEX_SHADER,
+			GEOMETRY_SHADER = GL_GEOMETRY_SHADER,
+			FRAGMENT_SHADER = GL_FRAGMENT_SHADER
 		};
 		unsigned int ID;
-		bool load(const std::string& vertexPath, const std::string& fragmentPath) 
-		{
-			return reinterpret_cast<bool(__thiscall*)(Shader*, const std::string & vertexPath, const std::string & fragmentPath)>(
-				FUNC_SHADER_LOAD
-				)(this, vertexPath, fragmentPath);
-		}
 		// thank you mashed potatoes for this
-		bool load(const std::string& vertexPath, const std::string& geometryPath, const std::string& fragmentPath)
+		bool load(const msvc_string& vertexPath, const msvc_string& geometryPath, const msvc_string& fragmentPath)
 		{
 			if (ID != 0)
 			{
@@ -47,7 +41,7 @@ namespace fdm
 				if (!success)
 				{
 					glGetProgramInfoLog(ID, 512, NULL, infoLog);
-					// std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+					std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 				}
 			}
 
@@ -58,22 +52,16 @@ namespace fdm
 
 			return ID != 0;
 		}
-		unsigned int compileShader(const std::string& path, shaderType type) 
+		bool load(const msvc_string& vertexPath, const msvc_string& fragmentPath)
 		{
-			return reinterpret_cast<unsigned int(__thiscall*)(Shader*, const std::string & path, shaderType fragmentPath)>(
-				FUNC_SHADER_COMPILESHADER
-				)(this, path, type);
-		}
-		bool load(const std::string& vertexPath, const std::string& fragmentPath) const
-		{
-			return reinterpret_cast<bool(__thiscall*)(const Shader*, const std::string & vertexPath, const std::string & fragmentPath)>(
-				FUNC_SHADER_LOAD
+			return reinterpret_cast<bool(__thiscall*)(Shader*, const msvc_string & vertexPath, const msvc_string & fragmentPath)>(
+				getFuncAddr((int)Func::Shader::load)
 				)(this, vertexPath, fragmentPath);
 		}
-		unsigned int compileShader(const std::string& path, shaderType type) const
+		unsigned int compileShader(const msvc_string& path, shaderType type) const
 		{
-			return reinterpret_cast<unsigned int(__thiscall*)(const Shader*, const std::string & path, shaderType fragmentPath)>(
-				FUNC_SHADER_COMPILESHADER
+			return reinterpret_cast<unsigned int(__thiscall*)(const Shader*, const msvc_string & path, shaderType fragmentPath)>(
+				getFuncAddr((int)Func::Shader::compileShader)
 				)(this, path, type);
 		}
 		unsigned int id() const
@@ -81,14 +69,6 @@ namespace fdm
 			return ID;
 		}
 		void use() const
-		{
-			glUseProgram(ID);
-		}
-		unsigned int id()
-		{
-			return ID;
-		}
-		void use()
 		{
 			glUseProgram(ID);
 		}

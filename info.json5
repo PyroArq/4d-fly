@@ -1,0 +1,14 @@
+{
+  id: "redjard.fly",
+  name: "4D SmoothFly",
+  author: "Redjard",
+  description: "Mod that allows you to fly better than the stinky 4D Fly by Tr1NgleDev",
+  version: "3.0",
+  gameVersion: "0.2.1.4",
+  modDLL: "4D SmoothFly.dll",
+  externalDLLs: [],
+  dependencies: {
+    "tr1ngledev.4dkeybinds": "? before >= 1.1",
+    "redjard.console": "? before >= 1.0",
+  },
+}

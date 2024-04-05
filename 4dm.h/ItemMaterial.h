@@ -8,9 +8,9 @@ namespace fdm
 	{
 	public:
 		inline static const int STACK_MAX = 4096; 
-		std::string name; // 0x10
+		msvc_string name; // 0x10
 		inline static TexRenderer* tr = reinterpret_cast<TexRenderer*>((base + 0x2BF0A8));
-		inline static glm::u8vec4** barTUV = reinterpret_cast<glm::u8vec4**>((base + 0x2AD220));
+		inline static glm::u8vec4* barTUV = reinterpret_cast<glm::u8vec4*>((base + 0x2AD220));
 		inline static MeshRenderer *hypersilkRenderer = reinterpret_cast<MeshRenderer*>((base + 0x2795C0)); 
 		inline static MeshRenderer *rockRenderer = reinterpret_cast<MeshRenderer*>((base + 0x2795E0)); 
 		inline static MeshRenderer *barRenderer = reinterpret_cast<MeshRenderer*>((base + 0x279580)); 
@@ -21,41 +21,42 @@ namespace fdm
 
 		uint32_t getStackLimit() override
 		{
-			return reinterpret_cast<uint32_t (__thiscall*)(ItemMaterial* self)>(FUNC_ITEMMATERIAL_GETSTACKLIMIT)(this);
+			return reinterpret_cast<uint32_t (__thiscall*)(ItemMaterial* self)>(getFuncAddr((int)Func::ItemMaterial::getStackLimit))(this);
 		}
-		std::string getName() override
+		msvc_string getName() override
 		{
-			std::string result;
-			return reinterpret_cast<std::string (__thiscall*)(ItemMaterial* self, std::string* result)>(FUNC_ITEMMATERIAL_GETNAME)(this, &result);
+			msvc_string result;
+			return reinterpret_cast<msvc_string& (__thiscall*)(ItemMaterial* self, msvc_string* result)>(getFuncAddr((int)Func::ItemMaterial::getName))(this, &result);
 		}
 		void render(const glm::ivec2& pos) override
 		{
-			return reinterpret_cast<void (__thiscall*)(ItemMaterial* self, const glm::ivec2& pos)>(FUNC_ITEMMATERIAL_RENDER)(this, pos);
+			return reinterpret_cast<void (__thiscall*)(ItemMaterial* self, const glm::ivec2& pos)>(getFuncAddr((int)Func::ItemMaterial::render))(this, pos);
 		}
 		void renderEntity(const m4::Mat5& MV, bool inHand, const glm::vec4& lightDir) override
 		{
-			return reinterpret_cast<void (__thiscall*)(ItemMaterial* self, const m4::Mat5 & MV, bool inHand, const glm::vec4 & lightDir)>(FUNC_ITEMMATERIAL_RENDERENTITY)(this, MV, inHand, lightDir);
+			return reinterpret_cast<void (__thiscall*)(ItemMaterial* self, const m4::Mat5 & MV, bool inHand, const glm::vec4 & lightDir)>(getFuncAddr((int)Func::ItemMaterial::renderEntity))(this, MV, inHand, lightDir);
 		}
 		bool isDeadly() override
 		{
-			return reinterpret_cast<bool (__thiscall*)(ItemMaterial* self)>(FUNC_ITEMMATERIAL_ISDEADLY)(this);
+			return reinterpret_cast<bool (__thiscall*)(ItemMaterial* self)>(getFuncAddr((int)Func::ItemMaterial::isDeadly))(this);
 		}
 		bool isCompatible(const std::unique_ptr<Item>& other) override
 		{
-			return reinterpret_cast<bool (__thiscall*)(ItemMaterial* self, const std::unique_ptr<Item>& other)>(FUNC_ITEMMATERIAL_ISCOMPATIBLE)(this, other);
+			return reinterpret_cast<bool (__thiscall*)(ItemMaterial* self, const std::unique_ptr<Item>& other)>(getFuncAddr((int)Func::ItemMaterial::isCompatible))(this, other);
 		}
 		bool action(World* world, Player* player, int action) override
 		{
-			return reinterpret_cast<bool (__thiscall*)(ItemMaterial* self, World* world, Player* player, int action)>(FUNC_ITEMMATERIAL_ACTION)(this, world, player, action);
+			return reinterpret_cast<bool (__thiscall*)(ItemMaterial* self, World* world, Player* player, int action)>(getFuncAddr((int)Func::ItemMaterial::action))(this, world, player, action);
 		}
 		void postAction(World* world, Player* player, int action) override
 		{
-			return reinterpret_cast<void (__thiscall*)(ItemMaterial* self, World* world, Player* player, int action)>(FUNC_ITEMMATERIAL_POSTACTION)(this, world, player, action);
+			return reinterpret_cast<void (__thiscall*)(ItemMaterial* self, World* world, Player* player, int action)>(getFuncAddr((int)Func::ItemMaterial::postAction))(this, world, player, action);
 		}
 		std::unique_ptr<Item> clone() override
 		{
 			std::unique_ptr<Item> result;
-			return reinterpret_cast<std::unique_ptr<Item> (__thiscall*)(ItemMaterial* self, std::unique_ptr<Item>* result)>(FUNC_ITEMMATERIAL_CLONE)(this, &result);
+			reinterpret_cast<std::unique_ptr<Item>* (__thiscall*)(ItemMaterial* self, std::unique_ptr<Item>* result)>(getFuncAddr((int)Func::ItemMaterial::clone))(this, &result);
+			return result;
 		}
 	};
 }

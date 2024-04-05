@@ -14,23 +14,23 @@ namespace fdm
 		std::atomic_bool shadows; // 0x1CD
 		std::atomic_bool lights; // 0x1CE
 
-		_Dest_World() override
+		~WorldManager() override
 		{
-			reinterpret_cast<void(__thiscall*)(WorldManager* self)>(FUNC_WORLDMANAGER_DESTR_WORLDMANAGER)(this);
+			reinterpret_cast<void(__thiscall*)(WorldManager* self)>(getFuncAddr((int)Func::WorldManager::destr_WorldManager))(this);
 		}
 		void updateRenderFrustum(const glm::mat4& p) 
 		{
-			return reinterpret_cast<void (__thiscall*)(WorldManager* self, const glm::mat4& p)>(FUNC_WORLDMANAGER_UPDATERENDERFRUSTUM)(this, p);
+			return reinterpret_cast<void (__thiscall*)(WorldManager* self, const glm::mat4& p)>(getFuncAddr((int)Func::WorldManager::updateRenderFrustum))(this, p);
 		}
-		void setBlockUpdate(const glm::ivec4& block, unsigned char value) override
+		bool setBlockUpdate(const glm::ivec4& block, unsigned char value) override
 		{
-			return reinterpret_cast<void (__thiscall*)(WorldManager* self, const glm::ivec4& block, unsigned char value)>(FUNC_WORLDMANAGER_SETBLOCKUPDATE)(this, block, value);
+			return reinterpret_cast<bool (__thiscall*)(WorldManager* self, const glm::ivec4& block, unsigned char value)>(getFuncAddr((int)Func::WorldManager::setBlockUpdate))(this, block, value);
 		}
 		
 
 		virtual void render(const m4::Mat5& MV, bool glasses, glm::vec3& worldColor)
 		{
-			return reinterpret_cast<void(__thiscall*)(WorldManager * self, const m4::Mat5 & MV, bool glasses, glm::vec3 & worldColor)>(FUNC_WORLDMANAGER_RENDER)(this, MV, glasses, worldColor);
+			return reinterpret_cast<void(__thiscall*)(WorldManager * self, const m4::Mat5 & MV, bool glasses, glm::vec3 & worldColor)>(getFuncAddr((int)Func::WorldManager::render))(this, MV, glasses, worldColor);
 		}
 		virtual void updateLocal(StateManager& s, Player* player, double dt) {}
 		virtual void cleanupLocal(Player* player) {}
@@ -39,7 +39,7 @@ namespace fdm
 		virtual void setSkinVisibility(bool visible) {}
 		virtual void localPlayerInit(Player* player) {}
 		virtual void localPlayerRespawn(StateManager&, Player*) {}
-		virtual void sendChatMessage(Player* player, const std::string&) {}
+		virtual void sendChatMessage(Player* player, const msvc_string&) {}
 		virtual void handleLightingOptionsUpdate() {}
 	};
 }
