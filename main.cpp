@@ -21,7 +21,7 @@ $hook(void, Player, updatePos, World* world, double dt) {
 	
 	float speed = 15;
 	if (self->keys.ctrl)
-		speed = 100;
+		speed = 30;
 	if (self->inventoryManager.secondary)  // inventory open
 		speed = 0;
 	
